@@ -14,9 +14,6 @@ private JFrame frame;
 private JLabel resultsLabel;
 private JTextField textF1;
 private JTextField textF2;
-private int input1;
-private int input2;
-
 
 public Calculator()
 {
@@ -35,16 +32,16 @@ private void updateResultLabel(String text)
 }
 private String calculate(String text1, String text2, String op)
 {
-    if(text1.equals(""))
+    if(text1.equals("") || text2.equals(""))
     {
-        return "ERROR";
+        return "Error";
     }
-    else if (text2.equals(""))
+    else if (!isValidNum(textF1.getText()) || !isValidNum(textF2.getText()))
     {
-        return "ERROR";
+        return "Error";
     }
-    int num1 = Integer.parseInt(textF1.getText());
-    int num2 = Integer.parseInt(textF2.getText());
+    double num1 = Double.parseDouble(textF1.getText());
+    double num2 = Double.parseDouble(textF2.getText());
     if(op == "add")
     {
       return String.valueOf(num1 + num2);  
@@ -59,10 +56,26 @@ private String calculate(String text1, String text2, String op)
     }
     else if(op == "div")
     {
-        double result = num1 / num2;
+        if(num1 == 0 || num2 == 0)
+        {
+           return "Error"; 
+        }
+        double result = (num1 / num2);
         return String.valueOf(result);  
     }
     return "ERROR";
+}
+
+public boolean isValidNum(String num) {
+    if (num == null) {
+        return false;
+    }
+    try {
+        double d = Double.parseDouble(num);
+    } catch (NumberFormatException nfe) {
+        return false;
+    }
+    return true;
 }
 public void initializeComponent()
 {
@@ -75,10 +88,10 @@ public void initializeComponent()
     
     
     // BUTTON CONFIG
-    JButton button1 = new JButton("+");
-    JButton button2 = new JButton("-");
-    JButton button3 = new JButton("*");
-    JButton button4 = new JButton("/");
+    JButton button1 = new JButton("ADD");
+    JButton button2 = new JButton("SUB");
+    JButton button3 = new JButton("MULT");
+    JButton button4 = new JButton("DIV");
     
     button1.setName("addButton");
     button2.setName("subButton");
@@ -108,14 +121,16 @@ public void initializeComponent()
     textPanel.add(textF1);
     textPanel.add(textF2);
     resultPanel.add(resultsLabel);
-    resultPanel.add(textPanel);
+    resultPanel.add(textF1);
+    resultPanel.add(textF2);
     
     
     
-    panel.add(resultPanel);
-    panel.add(buttonPanel, BorderLayout.CENTER);
+   // panel.add(resultPanel);
+   // panel.add(buttonPanel, BorderLayout.CENTER);
     
-    fr.getContentPane().add(panel);
+    fr.getContentPane().add(resultPanel);
+    fr.getContentPane().add(buttonPanel);
     fr.pack();
     fr.setVisible(true);
     
