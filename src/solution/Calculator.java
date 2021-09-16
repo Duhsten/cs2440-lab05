@@ -3,22 +3,25 @@ package solution;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class Calculator
 {
 private JFrame frame;
 private JLabel resultsLabel;
+private JTextField textF1;
+private JTextField textF2;
+private int input1;
+private int input2;
 
 
 public Calculator()
 {
     frame = new JFrame("Calculator");
+    initializeComponent();
 }
 
 
@@ -28,9 +31,40 @@ public JFrame getFrame()
 }
 private void updateResultLabel(String text)
 {
-    resultsLabel.setText(text);
+    resultsLabel.setText("Result = " + text);
 }
-public void initCalc()
+private String calculate(String text1, String text2, String op)
+{
+    if(text1.equals(""))
+    {
+        return "ERROR";
+    }
+    else if (text2.equals(""))
+    {
+        return "ERROR";
+    }
+    int num1 = Integer.parseInt(textF1.getText());
+    int num2 = Integer.parseInt(textF2.getText());
+    if(op == "add")
+    {
+      return String.valueOf(num1 + num2);  
+    }
+    else if(op == "sub")
+    {
+        return String.valueOf(num1 - num2);  
+    }
+    else if(op == "mult")
+    {
+        return String.valueOf(num1 * num2);  
+    }
+    else if(op == "div")
+    {
+        double result = num1 / num2;
+        return String.valueOf(result);  
+    }
+    return "ERROR";
+}
+public void initializeComponent()
 {
     JFrame fr = getFrame(); // Frame for the Calculator   
     JPanel panel = new JPanel(new GridLayout(2,4)); // Panel that all other panels sit inside
@@ -67,9 +101,9 @@ public void initCalc()
     resultsLabel = new JLabel("Result = N/A");
     resultsLabel.setName("resultLabel");
     JPanel textPanel = new JPanel(new GridLayout(2,1));
-    JTextField textF1 = new JTextField("");
+    textF1 = new JTextField("");
     textF1.setName("leftOperand");
-    JTextField textF2 = new JTextField("");
+    textF2 = new JTextField("");
     textF2.setName("rightOperand");
     textPanel.add(textF1);
     textPanel.add(textF2);
@@ -84,11 +118,51 @@ public void initCalc()
     fr.getContentPane().add(panel);
     fr.pack();
     fr.setVisible(true);
+    
+    
+    
+    
+    // Action Listeners and Helpers
+    // BUTTONS
+    
+    //Add
+    button1.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            String result = calculate(textF1.getText(), textF2.getText(), "add");
+            updateResultLabel(result);
+        }
+    });
+    button2.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            String result = calculate(textF1.getText(), textF2.getText(), "sub");
+            updateResultLabel(result);
+        }
+    });
+    button3.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            String result = calculate(textF1.getText(), textF2.getText(), "mult");
+            updateResultLabel(result);
+        }
+    });
+    button4.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            String result = calculate(textF1.getText(), textF2.getText(), "div");
+            updateResultLabel(result);
+        }
+    });
+    
+    
+    
+    
+
+    
+    
+    
 }
 public static void main(String[] args)
 {
     Calculator calc = new Calculator();
-    calc.initCalc();
+    
     
 }
 }
